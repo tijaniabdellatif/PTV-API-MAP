@@ -1,0 +1,35 @@
+:root{
+    --bg-blue: #28306E !important;
+    --bg-orange: #F78D20;
+    --success-color: #28a745;
+    --primary-color: #007bff;
+    --secondary-color: #7f95a2;
+    --warning-color: #ffc107;
+    --warning-color-secondary: rgb(238, 195, 6);
+    --info-color: #17a2b8;
+    --dark-color: #343a40;
+    --info-color-secondary: #9005bb;
+    --danger-color: #dc3545;
+    --danger-color-secondary: #f11616;
+    --default-color: #ebedf3;
+}
+
+
+
+*{
+    box-sizing: border-box;
+  
+ 
+}
+
+#app {
+    margin: 0;
+    padding: 0;
+   
+}
+
+
+#dv_map {
+    margin: 10px;
+    height: 90vh;
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="custom/jquery.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+    <title>Document</title>
+
+</head>
+<body>
+
+    <header>
+        <div>
+            <h1>Map sample</h1>
+        </div>
+    </header>
+
+    <main- div="app">
+        <div id="dv_map">
+            <div class="leaflet-top leaflet-right">
+                <div class="auto-search-wrapper">
+                  
+                  </div>
+            </div>
+        </div>
+    </main>
+    
+     <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="custom/leaflet.js"></script>
+ <script src="custom/leaflet.ptv.js"></script>
+
+  
+ <script src="https://xserver2.cloud.ptvgroup.com/services/xmap-client.js"></script>
+ <script src="https://xserver2.cloud.ptvgroup.com/services/xroute-client.js"></script>
+ <script src="https://xserver2.cloud.ptvgroup.com/services/xlocate-client.js"></script>
+
+ <script src="plugins/map.plugin.js"></script>
+ <script src="plugins/ptv.plugin.js"></script>
+
+ <script src="custom/leaflet.cluster.js"></script>
+<link rel="stylesheet" href="css/marker.css">
+ <script>
+
+window.onload = async function(){
+
+init();
+
+const data = await $().PTV('renderMapXY',{lat:6.1256572,lng:49.4816576});
+console.log('this is data from rendering a map :',data);
+const location = await $().PTV('SearchByPoints',{lat:6.1256572,lng:49.4816576});
+console.log('this is data from locating  :',location);
+
+}
+
+function init(){
+
+$().Map('init')
+$().PTV('init')
+}
+
+
+ </script>
+</body>
+</html>
