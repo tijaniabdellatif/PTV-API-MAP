@@ -84,9 +84,11 @@
 
                          if(!err){
 
+                          console.log('this is the search by point : ',res);
+
                             const{results:[{location}]} = res;
-                            const {address,referenceCoordinate:exactPoints}=location;
-                            resolve({address,exactPoints});
+                            const {address,referenceCoordinate:exactPoints,formattedAddress}=location;
+                            resolve({address,exactPoints,formattedAddress});
                          }
                          reject(err);
                    },10000)

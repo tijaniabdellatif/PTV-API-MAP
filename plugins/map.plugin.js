@@ -20,7 +20,7 @@
                methods.initMap();
            },
 
-
+         
 
 
         getData: function(key){
@@ -39,10 +39,13 @@
 
                    iconUrl: path,
                    iconSize: [50, 50],
+                   iconAnchor:[25,25]
                 })
 
                 return myIcon;
-           }
+             }
+
+            
 
              type=(type != undefined)? type:"";
 
@@ -55,11 +58,16 @@
                 let mapElem = 'virtual_map' //+ type;
                 $('#'+mapElem).html('<div id="dv_map" style="width:100%;height:100%;background:#eaecef"></div>');
              
-                const attribution = '&copy; <a class="attribution" href="https://www.omniyat.com/">Omniyat</a>'
-                defaults.defaultLayer = new L.TileLayer("https://xserver2.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}", { minZoom: 1, maxZoom: 30,attribution});
+                const attribution = '&copy; <a class="attribution" href="https://www.omniyat.com/">Omniyat</a>';
+           
 
-                console.log('default layer : ',defaults.defaultLayer);
-            
+                defaults.defaultLayer = new L.TileLayer("https://xserver2.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}", { minZoom: 1, maxZoom: 30,attribution});
+                
+                defaults.PTV_TRUCK = new L.TileLayer('https://xserver2.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}?storedProfile=silkysand&layers=PTV_TruckAttributes,background,transport,labels',{pane: 'tilePane', minZoom: 3, maxZoom: 18, noWrap: true});
+                defaults.Transport = new L.TileLayer('https://xserver2.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}?storedProfile=silkysand&layers=transport');
+                defaults.Labels = new L.TileLayer('https://xserver2.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}?storedProfile=silkysand&layers=labels');
+                
+                
                 let _zoom = (type =='')? 10 : defaults.currentZoom; 
                 defaults.map = L.map('dv_map', {
                     center:  defaults.defaultPoint,
@@ -67,28 +75,56 @@
                     layers: [defaults.defaultLayer],
                     crs: L.CRS.PTVMercator,
                     maxZoom: 17,
-                    closePopupOnClick:true
+                
                 });
 
+                var overlays = {
+                    'PTV Truck Attributes': defaults.PTV_TRUCK,
+                    
+                  };
+                  
+                  L.control.layers(null, overlays, { collapsed: false }).addTo(defaults.map);
 
+                // defaults.map.on('click',async e => {
+                //     const {lat,lng} = e.latlng
+                //     defaults.marker = new L.marker([0, 0],{
+                //         icon:setIcon('../icons/map-pin.svg'),
+                //       }).addTo(defaults.map);
+        
+                //     defaults.marker.setLatLng([lat,lng]);
+                //     const location = await $().PTV('SearchByPoints',{lat:lng,lng:lat});
+                //     console.log('location is : ',location);
+                //     const {address:{city,country,province,state,postalCode}}=location
+                //     defaults.marker.bindPopup(`<p>
+                      
+                //        <span>Latitude ${lat}</span>
+                //        <span>Longitude ${lng}</span>
+                //        <span>${city} ${country} ${province}</span>
+                    
+                //     </p>`)
+                // })
 
-
-              defaults.marker = new L.marker([0, 0],{
-                icon:setIcon('../icons/map-pin.svg'),
-                draggable:true
-              }).addTo(defaults.map);
-
-             
+                defaults.map.on('click', async function(e) {
                 
+                    const {lat,lng} = e.latlng;
 
-                defaults.map.on('click',async e => {
-
-                    const {lat,lng} = e.latlng
-                    defaults.marker.setLatLng([lat,lng]);
+                    defaults.marker = new L.marker([lat,lng],{
+                        icon:setIcon('../icons/map-pin.svg')
+                    }).addTo(defaults.map)
+               
                     const location = await $().PTV('SearchByPoints',{lat:lng,lng:lat});
-                    console.log('this is the location :',location);
-                })
-             
+                    console.log('location is : ',location);
+                    const {address:{city,country,province,state,postalCode}}=location
+                    defaults.marker.bindPopup(`<p>
+                      
+                       <span>Latitude ${lat}</span>
+                       <span>Longitude ${lng}</span>
+                       <span>${city} ${country} ${province}</span>
+                    
+                    </p>`)
+
+                });
+                defaults.map.invalidateSize();
             }
             defaults.oldType = type;
              $().PTV('init') 
