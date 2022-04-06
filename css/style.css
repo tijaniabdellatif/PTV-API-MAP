@@ -12,11 +12,9 @@
     --danger-color: #dc3545;
     --danger-color-secondary: #f11616;
     --default-color: #ebedf3;
-
-
-    --select-border: #777;
-  --select-focus: blue;
-  --select-arrow: var(--select-border);
+   --select-border: #777;
+   --select-focus: blue;
+   --select-arrow: var(--select-border);
 }
 
 
@@ -47,7 +45,7 @@ body{
 
 #dv_map {
     margin: 10px;
-    height: 100vh;
+    height: 120vh;
     width:100%;
 }
 
@@ -348,63 +346,125 @@ body{
 
 }
 
-i{
 
-  font-size: 15px;
-}
- 
 .profiles{
 
-  right:40px;
-  top:20px;
-  margin: 0 auto;
+  right:0;
+  top:0;
+  left:30px;
+  width:400px;
   height:auto;
   position: absolute;
   z-index: 100;
-  background-color: var(--default-color);
+
   padding:15px;
-  -webkit-box-shadow: 1px 3px 25px 7px rgba(0,0,0,0.76); 
-box-shadow: 1px 3px 25px 7px rgba(0,0,0,0.76);
-border-radius: 15px;
+  border-radius: 15px;
 }
 
 
-.result{
+#result{
 
-  width:auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  top:90px;
+}
+.address-item{
 
+  width:300px;
+  background-color: var(--default-color);
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  transform: translateX(11px);
+  transition: all 0.3s linear;
 }
 
-.result i{
+.address-item:hover{
 
-  display: inline-block;
-  cursor: pointer;
-  transform: all 0.2s linear;
+    background-color: rgba(210, 215, 211,0.9);
+ 
+}
+.adr-value a{
 
+  text-decoration: none;
+  font-size: 15px;
+  color:var(--dark-color);
+  
 }
 
-.result p {
 
-   display: inline-block;
-   padding: 0 0 0 13px;
+.position{
+
+    padding:0 13px 0 13px;
+    color:blue;
 }
 
 
-.selected{
-
+.search-box{
   margin:14px;
 }
 
-.search{
-
-  width:300px;
-  height:auto;
-  padding:15px;
-  border:none;
-  border-radius: 12px;
-  transition: all 0.2s linear;
+.search-box{
+  position: absolute;
+  background: none;
+  height: 40px;
+  border-radius: 50px;
+  padding: 10px;
+  
 }
 
+
+.search-input{
+
+  outline: none;
+  border: none;
+  background: var(--bg-orange);
+  width: 0;
+  padding: 0;
+  color: var(--default-color);
+  border-radius: 30px;
+  font-size: 16px;
+  transition: .3s;
+  line-height: 40px;
+  
+}
+.search-input::placeholder {
+  color: var(--default-color);
+}
+
+/* icon */
+.search-btn {
+  color: #fff;
+  float: right;
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+  background: var(--bg-orange);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  transition: .3s;
+}
+
+.search-input:focus,
+.search-input:not(:placeholder-shown) {
+  width: 240px;
+  padding: 0 6px;
+}
+
+.search-box:hover > .search-input {
+  width: 240px;
+  padding:3px 10px;
+}
+
+.search-box:hover > .search-btn,
+.search-input:focus + .search-btn,
+.search-input:not(:placeholder-shown) + .search-btn {
+  background: #fff;
+  color: var(--bg-orange);
+}
 option{
 
   font-size: 13px;
@@ -416,8 +476,7 @@ option{
     padding:15px;
     font-weight: bold;
     font-style: italic;
-   
-    
+  
 }
 
 
@@ -549,4 +608,78 @@ option{
 .hide{
 
   display: none !important;
+}
+
+
+.forms{
+
+  position: absolute;
+  z-index: 1000;
+  top:100px;
+  left:60px;
+  width: 300px;
+  -webkit-box-shadow: 2px 14px 39px 0px rgba(0,0,0,0.62); 
+box-shadow: 2px 14px 39px 0px rgba(0,0,0,0.62);
+
+
+
+}
+
+.money {
+
+  color:var(--bg-orange);
+}
+
+.data {
+
+  display: flex;
+  flex-direction: column;
+}
+
+.form-control{
+
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.form-control label{
+
+    font-weight: bold;
+    padding:0 0 12px 0;
+}
+
+label i{
+
+  color:var(--bg-orange);
+}
+.form-control input{
+
+    outline: none;
+    border-radius: 10px;
+    border: 1px solid rgba(214, 210, 196, 0.9);
+    padding:12px;
+}
+
+.form-control select {
+  outline: none;
+  border-radius: 10px;
+  border: 1px solid rgba(214, 210, 196, 0.9);
+  padding:12px;
+
+}
+
+.form-control button{
+
+    padding:12px;
+    border-radius: 10px;
+    color:var(--info-color);
+    border: 1px solid var(--info-color);
+    transition: all 0.3s ease-in;
+}
+
+.form-control button:hover{
+
+   background-color: var(--info-color);
+   color:var(--default-color);
 }

@@ -218,7 +218,7 @@
                                     "enabled": true
                                 }]
                             },
-                       "vehicleProfile": {
+                      "vehicleProfile": {
                       "engine": {
                         "fuelConsumption": 35,
                         "consumptionFactorsPerSpeed": [

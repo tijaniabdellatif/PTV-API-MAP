@@ -8,13 +8,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
    crossorigin=""/>
-   <link rel="stylesheet" href="leaflet/leaflet-panel.css" />
-   <link rel="stylesheet" href="leaflet/leaflet-search.css" />
    <link rel="stylesheet" href="icons/icons.css" />
+   <link rel="stylesheet" href="css/jquery-ui.css" />
+
+   <link rel="stylesheet" href="addons/timepicker.css" />
+
+
     <title>Leaflet</title>
 
 </head>
@@ -24,21 +28,17 @@
 
    
     <main class="container-fluid">
-
         <div class="profiles">
-            <div class="selected">
-                <h5>Choose your profile</h5>
-                <select id="profil">           
-                </select>
-            </div>
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Start Looking For Something!">
+                <a class="search-btn" href="#">
+                   <i class="fas fa-search"></i>
+                </a>
+              </div>
 
-            <div class="selected">
-                <h5>Search location</h5>
-                <input class="search" type="text" id="site-search" name="q">
-                 <div class="" id="result">
-                 </div>
-            </div> 
-      </div>
+            <div class="" id="result">
+            </div>
+        </div>
 
         <div id="app" class="row">
             <div id="dv_map" class="col-md-12">
@@ -53,10 +53,66 @@
         </div>
 
 
-        <div class="costs">
-           
+        <div class="forms">
+            <form class="data">
+                <div class="form-control">
+                    <h5 class="money">Date Reference</h5>
+                    <input type="text" id="datepicker" class="datepicker" />   
+                </div>
+               <div class="form-control">
+                <h5 class="money">Cout Monétaire</h5>
+               </div>
+                <div class="form-control"> 
+                    <label>Cout/Kilometre <i class="fa-solid fa-circle-info"></i></label>
+                    <input type="number" value="12" id="cost" />
+                </div>
+                
+                <div class="form-control"> 
+                    <label>Cout/Horraire de travail <i class="fa-solid fa-circle-info"></i></label>
+                    <input type="number" value="12" id="travail" />
+                </div>
+    
+    
+                <div class="form-control"> 
+                    <label>Cout/Litre de carburant <i class="fa-solid fa-circle-info"></i></label>
+                    <input type="number" value="12" id="carburant" />
+                </div>
+                <div class="form-control"> 
+                    <label>Cout/Unité d'energie <i class="fa-solid fa-circle-info"></i></label>
+                    <input type="number" value="12" id="travail" />
+                </div>
+                <div class="form-control"> 
+                    <label>Devise</label>
+                    <select>
+                        <option value="EUR">EUR (EURO)</option>
+                        <option value="USD">USD (Dollar Américain)</option>
+                        <option value="EUR">EUR (EURO)</option>
+                    </select>
+                </div>
+
+                <div class="form-control">
+                    <div id="radioset" style="display: flex;
+                    flex-direction: column;
+                    justify-content: space-around;
+                    height: 171px;">
+                        <input type="checkbox" id="radio1" name="radio"><label for="radio1" style="padding: 13px;">Truck Attributes</label>
+                        <input type="checkbox" id="radio2" name="radio" checked><label for="radio2" style="padding: 13px;">PTV_SpeedPatterns</label>
+                        <input type="checkbox" id="radio3" name="radio"><label for="radio3" style="padding: 13px;">PTV_TrafficIncidents</label>
+                    </div>
+                </div>
+
+                <div class="form-control"> 
+                    <button class="btn">Calculer</button>
+                    
+                </div>
+            </form>
 
         </div>
+
+        <!-- <div class="costs">
+           
+
+        </div> -->
 
 </main>
    
@@ -65,23 +121,24 @@
      <!-- Make sure you put this AFTER Leaflet's CSS -->
  <script src="custom/leaflet.js"></script>
  <script src="custom/leaflet.ptv.js"></script>
- <script src="leaflet/leaflet-panel.js"></script>
+  <script src="custom/jquery-ui.js"></script>
+  <script src="custom/jquery-date-fr.js"></script>
+  <script src="addons/jquery-timepicker.js"></script>
+  <script src="addons/fr-addon.js"></script>
 
-  
  <script src="https://xserver2.cloud.ptvgroup.com/services/xmap-client.js"></script>
  <script src="https://xserver2.cloud.ptvgroup.com/services/xroute-client.js"></script>
  <script src="https://xserver2.cloud.ptvgroup.com/services/xlocate-client.js"></script>
 
  <script src="plugins/map.plugin.js"></script>
  <script src="plugins/ptv.plugin.js"></script>
- 
- <script src="leaflet/leaflet-search.js"></script>
+
  
 
  <script>
 
 window.onload = async function(){
-
+  
 init();
 
 

@@ -86,7 +86,23 @@
            
 
                 defaults.defaultLayer = new L.TileLayer("https://xserver2.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}", { minZoom: 1, maxZoom: 30,attribution});
-                defaults.PTV_TRUCKATTRIBUTES = new L.TileLayer(`https://xserver2.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}?storedProfile=silkysand&layers=transport,labels,PTV_TruckAttributes,background`, {minZoom: 1, maxZoom: 30,noWrap: true})
+                defaults.openStreet = new L.TileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{ minZoom: 1, maxZoom: 30,attribution});
+                defaults.Sattelite = new L.TileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+                    maxZoom: 20,
+                    subdomains:['mt0','mt1','mt2','mt3']
+                });
+
+                defaults.Terrain = new L.TileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',{
+                    maxZoom: 20,
+                    subdomains:['mt0','mt1','mt2','mt3']
+                });
+
+                defaults.Hybride = new L.TileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
+                    maxZoom: 20,
+                    subdomains:['mt0','mt1','mt2','mt3']
+                });
+                
+                
                 let _zoom = (type =='')? 10 : defaults.currentZoom; 
                 defaults.map = L.map('dv_map', {
                     center:  defaults.defaultPoint,
@@ -102,22 +118,52 @@
                 defaults.map.attributionControl.setPosition('bottomright');
                 defaults.map.attributionControl.setPrefix('&copy; Omniyat');
                 defaults.map.zoomControl.setPosition('topleft');
-
              
+                  
+                defaults.layers = {
+                      'Default':defaults.defaultLayer,
+                      'Street' : defaults.openStreet,
+                      'Sattelite':defaults.Sattelite,
+                      'Terrain':defaults.Terrain,
+                      'Hybrid' : defaults.Hybride
+                    
+                }
 
+                L.control.layers(
+                    defaults.layers,
+                    defaults.overlays,
+                    {collapsed:true}
+                ).addTo(defaults.map);
+             
+                let datePicker =  $( "#datepicker" ).datetimepicker({
+                    changeYear: true,
+                    changeMonth:true,
+                    dateFormat:'yy-mm-dd',
+                    minDate: 0,
+                    timeFormat: 'HH:mm:ss',
+                });
 
-                // defaults.layers = {
+                
+                datePicker.on('change',function(e){
 
-                //       "default":defaults.defaultLayer,
-                //       "Labels Transport with Attributes":defaults.PTV_TRUCKATTRIBUTES
-                // }
+                     console.log(typeof e.target.value);
+                })
 
+                $( "#radioset" ).buttonset();
 
-                // L.control.layers(
-                //     defaults.layers,
-                //     defaults.overlays,
-                //     {collapsed:true}
-                // ).addTo(defaults.map);
+               
+            // $('#timepicker').timepicker({ timeFormat: 'h:mm:ss p', interval: 15,dropdown:true,dynamic:true,
+            //     change: function(time) {
+            //         // the input field
+            //         var element = $(this), text;
+            //         // get access to this Timepicker instance
+            //         var timepicker = element.timepicker();
+            //         text = 'Selected time is: ' + timepicker.format(time);
+            //         console.log('this is text',text);
+            //     }
+            // });
+
+                
       
               
                 $('.costs').addClass('hide');
@@ -132,49 +178,32 @@
     
                  });
                 
-                $('select').change(function(e){
-                    
-                      const value = e.target.value;
-                      defaults.PTV = new L.TileLayer("https://xserver2.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}?storedProfile="+value+'&layers=transport,labels,PTV_TruckAttributes,background', { minZoom: 1, maxZoom: 18,attribution}).addTo(defaults.map);
+               
+            
 
-                      switch(value){
+                $(".search-input").on('keydown',function(e){
 
-                                    case 'amber': new L.TileLayer(`https://xserver2.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}?storedProfile=${value}&layers=transport,labels,PTV_TruckAttributes,background`,{ pane: "tilePane", maxZoom: 18 }).addTo(defaults.map);
-                                    break;
-                                    case 'classic': new L.TileLayer(`https://xserver2.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}?storedProfile=${value}&layers=transport,labels,PTV_TruckAttributes,background`,{ pane: "tilePane", maxZoom: 18 }).addTo(defaults.map);
-                                    break;
-                                    case 'blackmarble': new L.TileLayer(`https://xserver2.cloud.ptvgroup.com/services/rest/XMap/tile/{z}/{x}/{y}?storedProfile=${value}&layers=transport,labels,PTV_TruckAttributes,background`,{ pane: "tilePane", maxZoom: 18 }).addTo(defaults.map);
-                                    break;
-                                    default:defaults.PTV.addTo(defaults.map);
-                                    break;
-                      }
-                });
-
-
-                $("#site-search").on('keydown',function(e){
-
+ 
                     $('#result').html('');
+                    $('.forms').removeClass('hide');
                 })
 
-                $( "#site-search" ).on('keyup',async function(e){
+                $( ".search-input" ).on('keypress',async function(e){
 
+                    $('.forms').addClass('hide');
                       const dInput = e.target.value;
                       const data = await $().PTV('searchByLocations',dInput);
                       console.log('data formated',data);
-
-
-                      
-                      $.each(data,function(index,value){
-                           
-                        if(value.score >= 90){
-
-                            let html =  `
-
-                            <div class="result">
-                            
+                      $.each(data.slice(0,10),function(index,value){
+                            let html =`
+                            <div class="address-item">
+                            <div class="position">
                             <i class="fa-solid fa-map-pin" id="choose"></i>
-                            <span class="add">&rarr; ${value.type}</span>
-                            <p>${value.exact}</p>
+                            </div>
+                            <div class="address">
+                            <p class="adr-value"><a href="#" id="chosen">${value.exact}</a></p>
+                            </div>
+                            
                             </div>
                          `
 
@@ -195,29 +224,17 @@
                                 default: $('.add').addClass('color1');
                                 break;
                            }
-                         $('#result').append(Mustache.render(html,value));
-
-                       
-                        }
-                        else {
-
-                            return false;
-                        }
-                              
+                         $('#result').append(Mustache.render(html,value));    
                       });
 
-                      const element = document.querySelectorAll('#choose');
+                      const element = document.querySelectorAll('.address-item');
 
                       element.forEach(item => {
-      
                            item.addEventListener('click',function(e){
- 
-                            const title = e.target.parentElement.lastElementChild.innerText
                                
                               data.forEach(async element => {
-
                                  defaults.waypoints.push()
-                                  if(element.score >= 90){
+                                  if(element.score >= 60){
                                     let icon = L.icon({
                                           iconUrl:'../icons/placeholder.png',
                                           iconSize:[38,64],
@@ -226,7 +243,8 @@
                                     })
                                 
                                    let  marker = L.marker([element.loc[0],element.loc[1]],{
-                                      icon:icon
+                                      icon:icon,
+                                      clickable: true,
                                    })
                                     defaults.map.addLayer(marker);
                                     marker.bindPopup(`
@@ -238,8 +256,9 @@
                                     
                                     `).openPopup();
 
-                                    const latlng = marker.getLatLng();
+                                 
 
+                                    const latlng = marker.getLatLng();
                                     defaults.waypoints.push(latlng);
 
                                     const newData = await $().PTV('calculateRouteCost',defaults.waypoints);
@@ -259,7 +278,6 @@
                     
                                     let newHtml = `
                                     <h5>Monetary route Costs</h5>
-
                                     <div class="total">
                                         <p>total coast</p>
                                         <p>${monetaryCostsReport.totalCost}</p>
@@ -271,13 +289,10 @@
                                     </div>
                                     <div class="analyse">
                                         <p>Travel time</p>
-                                        <p>${travelTime}</p>
+                                        <p>${secondsToHms(travelTime)}</p>
                                         <p>24.5</p>
                                     </div>
                                     `;
-
-
-
 
                                     $('.costs').removeClass('hide');
                                     $('.costs').empty().html(newHtml);
@@ -288,6 +303,9 @@
                                     
                                     
                               })
+
+
+
     
                                
                            })
