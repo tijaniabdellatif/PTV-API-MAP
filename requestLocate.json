@@ -1,0 +1,10 @@
+{
+    "$type": "SearchByTextRequest",
+    "text": "esplanade 5270",
+    "searchOptions": {
+      "allowedCountries": [
+        "MA",
+        "FR"
+      ]
+    }
+  }

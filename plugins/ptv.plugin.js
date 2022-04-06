@@ -122,17 +122,15 @@
 
           searchByLocations : function(search = ''){
 
+             
              const options = {
               
                 "$type": "SearchByTextRequest",
                 "text": search,
-                "searchOptions": {
-                  "allowedCountries": [
-                    "FR",
-                    "LU",
-                    "MA"
-                  ]
+                "requestProfile": {
+                  "mapLanguage": "fr"
                 }
+              
              };
 
              return new Promise((resolve,reject) => {
@@ -141,7 +139,20 @@
 
                         if(!err){
 
-                          resolve(res);
+                          console.log('the result is : ',res);
+
+                         const {results} = res;
+                          const result = results.map(item => {
+                                return {
+                                     loc:[item.location.referenceCoordinate.y,item.location.referenceCoordinate.x],
+                                     title:item.location.formattedAddress,
+                                     term:search,
+                                     exact:item.location.formattedAddress + ' ' +item.location.address.country,
+                                     score:item.matchQuality.totalScore,
+                                     type:item.type
+                                }
+                          })
+                          resolve(result);
                         }
 
                         reject(err)
@@ -149,7 +160,7 @@
              })
           },
 
-          calculateRoute : function(latlngs){
+          calculateRouteCost: function(latlngs){
 
              let waypoints = [];
              for(let latlng of latlngs){
@@ -168,77 +179,96 @@
              }
 
              const resultFields = {
-              "monetaryCostsReport": true,
-              "polyline":true,
-              "toll":{
-                "enabled":true
+
+                  "monetaryCostsReport": true,
+                  "polyline":true
              }
 
-             }
-
-             const routeOptions={
-              "calculationCriteria": "MONETARY_COSTS",
-                "monetaryCostOptions": {
-                "costPerKilometer": 0.65,
-                "workingCostPerHour": 10,
-                "costPerEnergyUnit": 1
-              },
-              "currency": "USD"
-             };
-
-             const requestProfile={
-              "routingProfile": {
-                "searchSpace": {
-                  "heuristicAggressiveness": 0
-                }
-              },
-              "vehicleProfile": {
-                "engine": {
-                  "fuelConsumption": 35,
-                  "consumptionFactorsPerSpeed": [
-                    {
-                      "speed": 10,
-                      "factor": 1.7
+              const routeOptions = {
+              "timeConsideration": {
+                "$type": "ExactTimeConsiderationAtStart",
+                "referenceTime": "2022-04-04T16:29:10+01:00"
+                 },
+                 "calculationCriteria": "MONETARY_COSTS",
+                  "monetaryCostOptions": {
+                    "costPerKilometer": 0.65,
+                    "workingCostPerHour": 10,
+                    "costPerEnergyUnit": 1
                     },
-                    {
-                      "speed": 30,
-                      "factor": 1.5
-                    },
-                    {
-                      "speed": 50,
-                      "factor": 1
-                    },
-                    {
-                      "speed": 70,
-                      "factor": 0.8
-                    },
-                    {
-                      "speed": 80,
-                      "factor": 0.8
-                    },
-                    {
-                      "speed": 90,
-                      "factor": 1
-                    },
-                    {
-                      "speed": 100,
-                      "factor": 1.7
-                    }
-                  ]
-                }
+                    "currency": "EUR"
               }
-             }
 
-             return new Promise((resolve,reject) => {
+              const requestProfile ={
+
+                    "routingProfile": {
+                      "searchSpace": {
+                        "heuristicAggressiveness": 0
+                      }
+                    },
+                     "featureLayerProfile": {
+                                "themes": [{
+                                    "id": "PTV_SpeedPatterns",
+                                    "enabled": true
+                                }, {
+                                    "id": "PTV_TrafficIncidents",
+                                    "enabled": true
+                                },
+                                {
+                                    "id": "PTV_TruckAttributes",
+                                    "enabled": true
+                                }]
+                            },
+                       "vehicleProfile": {
+                      "engine": {
+                        "fuelConsumption": 35,
+                        "consumptionFactorsPerSpeed": [
+                          {
+                            "speed": 10,
+                            "factor": 1.7
+                          },
+                          {
+                            "speed": 30,
+                            "factor": 1.5
+                          },
+                          {
+                            "speed": 50,
+                            "factor": 1
+                          },
+                          {
+                            "speed": 70,
+                            "factor": 0.8
+                          },
+                          {
+                            "speed": 80,
+                            "factor": 0.8
+                          },
+                          {
+                            "speed": 90,
+                            "factor": 1
+                          },
+                          {
+                            "speed": 100,
+                            "factor": 1.7
+                          }
+                        ]
+                      }
+                    }
+              }
+          
+
+              return new Promise((resolve,reject) => {
 
                 defaults.xrouteClientExperimental.calculateRoute({waypoints,resultFields,routeOptions,requestProfile},(res,err)=>{
 
-                   if(!err){
-                     resolve(res);
-                   }
-                   reject(err);
-                },10000)
-             })
+
+                         if(!err){
+
+                            resolve(res);
+                         }
+
+                         reject(err);
+                     },10000)
+              })
 
           }
      }

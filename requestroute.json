@@ -1,0 +1,92 @@
+{
+    "waypoints": [
+      {
+        "$type": "OffRoadWaypoint",
+        "location": {
+          "offRoadCoordinate": {
+            "x": -71.46605721444521,
+            "y": 41.529091309052774
+          }
+        }
+      },
+      {
+        "$type": "OffRoadWaypoint",
+        "location": {
+          "offRoadCoordinate": {
+            "x": -71.30159862474424,
+            "y": 41.50594294935501
+          }
+        }
+      }
+    ],
+    "resultFields": {
+      "monetaryCostsReport": true,
+      "polyline":true
+    },
+    
+    "routeOptions": {
+      "timeConsideration": {
+                  "$type": "ExactTimeConsiderationAtStart",
+                  "referenceTime": "2022-04-04T16:29:10+01:00"
+        },
+      "calculationCriteria": "MONETARY_COSTS",
+      "monetaryCostOptions": {
+        "costPerKilometer": 0.65,
+        "workingCostPerHour": 10,
+        "costPerEnergyUnit": 1
+      },
+      "currency": "USD"
+      
+    },
+    "requestProfile": {
+      "routingProfile": {
+        "searchSpace": {
+          "heuristicAggressiveness": 0
+        }
+      },
+       "featureLayerProfile": {
+                  "themes": [{
+                      "id": "PTV_SpeedPatterns",
+                      "enabled": true
+                  }, {
+                      "id": "PTV_TrafficIncidents",
+                      "enabled": true
+                  }]
+              },
+      "vehicleProfile": {
+        "engine": {
+          "fuelConsumption": 35,
+          "consumptionFactorsPerSpeed": [
+            {
+              "speed": 10,
+              "factor": 1.7
+            },
+            {
+              "speed": 30,
+              "factor": 1.5
+            },
+            {
+              "speed": 50,
+              "factor": 1
+            },
+            {
+              "speed": 70,
+              "factor": 0.8
+            },
+            {
+              "speed": 80,
+              "factor": 0.8
+            },
+            {
+              "speed": 90,
+              "factor": 1
+            },
+            {
+              "speed": 100,
+              "factor": 1.7
+            }
+          ]
+        }
+      }
+    }
+  }
